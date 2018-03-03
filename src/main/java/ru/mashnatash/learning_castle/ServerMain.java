@@ -1,5 +1,6 @@
 package ru.mashnatash.learning_castle;
 
+
 public class ServerMain {
     public static void main(String[] args) {
         class WebsiteThread extends Thread {
@@ -18,5 +19,8 @@ public class ServerMain {
         }
         new WebsiteThread().start();
         new GameThread().start();
+
+
+
     }
 }

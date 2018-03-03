@@ -7,60 +7,61 @@ import com.google.gson.JsonParser;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import ru.mashnatash.learning_castle.data.*;
 
+import javax.xml.crypto.Data;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.HashSet;
-import java.util.Set;
+import java.sql.*;
+import java.util.*;
 
-public class WebsiteServer extends WebSocketServer {
+public class WebsiteServer extends WebSocketServer  {
     private static final int TCP_PORT = 4444;
 
-    private Set<WebSocket> connections;
+    private Set<WebSocket> unsafeSocketConnections;
+    private Set<WebSocket> socketConnections;
+    private Connection dataBaseConnection;
 
     public WebsiteServer() {
         super(new InetSocketAddress(TCP_PORT));
-        connections = new HashSet<WebSocket>();
+        unsafeSocketConnections = new HashSet<WebSocket>();
+        //connections = new HashSet<WebSocket>();
+        socketConnections = Collections.synchronizedSet(unsafeSocketConnections);
     }
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
-        connections.add(conn);
+        socketConnections.add(conn);
         System.out.println("New connection from website from " + conn.getRemoteSocketAddress().getAddress().getHostAddress() + " to port " + TCP_PORT);
     }
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        connections.remove(conn);
+        socketConnections.remove(conn);
         System.out.println("Closed connection to " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
     }
 
     @Override
     public void onMessage(WebSocket conn, String message) {
         System.out.println("Message from client: " + message);
-        /*for (WebSocket sock : connections) {
-            sock.send(message);
-        }*/
-        JsonParser parser = new JsonParser();
-        JsonObject mainObject = parser.parse(message).getAsJsonObject();
-        //JsonArray login = mainObject.getAsJsonArray("login");
-        System.out.println("Login: " + mainObject.get("login"));
-        System.out.println("Password " + mainObject.get("password"));
-        String st = mainObject.get("login").toString();
-        System.out.println(st);
-        if(mainObject.get("login").toString().equals("\"student\"") && mainObject.get("password").toString().equals("\"1234\"")) {
-            conn.send("{\"status\": \"OK\", \"rights\": \"student\"}");
-        } else if (mainObject.get("login").toString().equals("\"teacher\"") && mainObject.get("password").toString().equals("\"1234\"")) {
-            conn.send("{\"status\": \"OK\", \"rights\": \"teacher\"}");
-        } else {
-            conn.send("{\"status\": \"NOT OK\"}");
+        try {
+            dataBaseConnection = DataPool.getInstance().getConnection();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        conn.send(UserActions.authorization(dataBaseConnection,message));
     }
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
         //ex.printStackTrace();
         if (conn != null) {
-            connections.remove(conn);
+            socketConnections.remove(conn);
             // do some thing if required
         }
         System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());

@@ -25,20 +25,20 @@ window.onload = function () {
 
     socket.onopen = function (event) {
         console.log("Соединились");
-        label.innerHTML = 'Соединились';
+        //label.innerHTML = 'Соединились';
     };
 
     socket.onclose = function (event) {
         console.log("Соединение закрыто");
-        label.innerHTML = 'Соединение закрыто';
+        //label.innerHTML = 'Соединение закрыто';
         //код ошибки
         var errcode = event.code;
-        if(event.wasClean) {
+        /*if(event.wasClean) {
             label.innerHTML = 'Соединение закрыто корректно';
         } else {
             //причина ошибки
             label.innerHTML = 'Соединение закрыто с ошибкой' + event.reason;
-        }
+        }*/
     };
 
     socket.onerror = function (event) {

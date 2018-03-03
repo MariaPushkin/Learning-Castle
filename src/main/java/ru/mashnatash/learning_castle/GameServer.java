@@ -9,17 +9,20 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 public class GameServer extends WebSocketServer {
     private static final int TCP_PORT = 16000;
 
+    private Set<WebSocket> simple_connections;
     private Set<WebSocket> connections;
 
     public GameServer() {
         super(new InetSocketAddress(TCP_PORT));
-        connections = new HashSet<WebSocket>();
+        simple_connections = new HashSet<WebSocket>();
+        connections = Collections.synchronizedSet(simple_connections);
     }
 
     @Override
