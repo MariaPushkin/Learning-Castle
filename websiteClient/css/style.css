@@ -1,4 +1,128 @@
 body {
     background-image: url(../img/background.png);
-    background-color: aqua;
+    background-repeat: no-repeat;
+    -moz-background-size: 100%; /* Firefox 3.6+ */
+    -webkit-background-size: 100%; /* Safari 3.1+ и Chrome 4.0+ */
+    -o-background-size: 100%; /* Opera 9.6+ */
+    background-size: 100%;
+    font-family: Ubuntu-Regular, sans-serif;
 }
+
+.pic {
+    text-align: center;
+    position: relative;
+    top: 60px;
+    z-index: 2;
+}
+
+.teacher_menu {
+    background-color: rgba(0, 0, 0, 0.19);
+    float: left;
+}
+
+.greeting {
+    text-align: right;
+    float: right;
+}
+
+.menu_items, .greeting ul  {
+    margin: 0; /* Обнуляем значение отступов */
+    padding: 7px; /* Значение полей */
+}
+.menu_items li, .greeting ul li {
+    display: inline; /* Отображать как строчный элемент */
+    margin-right: 5px; /* Отступ слева */
+    padding: 6px; /* Поля вокруг текста */
+}
+
+.ad_block {
+    text-align: center;
+    width: 1000px;
+    padding-top: 10px;
+    margin: 0 auto;
+}
+
+.ad {
+    border-left: #d41872 2px solid;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 10px;
+    margin: 10px;
+    text-align: left;
+}
+
+.menu_items a {
+    text-decoration: none;
+    color: black;
+}
+
+.menu_items a:hover {
+    color: #9c036b;
+}
+
+.menu_items .active {
+    background-color: rgba(201, 128, 140, 0.8);
+    font-weight: bold;
+}
+
+
+/* define a fixed width for the entire menu */
+.navigation {
+    width: 300px;
+    padding-top: 10px;
+}
+
+/* reset our lists to remove bullet points and padding */
+.mainmenu, .submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* make ALL links (main and submenu) have padding and background color */
+.mainmenu a {
+    display: block;
+    background-color: #CCC;
+    text-decoration: none;
+    padding: 10px;
+    color: #000;
+}
+
+/* add hover behaviour */
+.mainmenu a:hover {
+    background-color: #C5C5C5;
+}
+
+/* this is the initial state of all submenus.
+  we set it to max-height: 0, and hide the overflowed content.
+*/
+.submenu {
+    /*overflow: hidden;
+    max-height: 0;
+    -webkit-transition: all 0.5s ease-out;*/
+    display: none;
+    max-height: 200px;
+}
+
+/* when hovering over a .mainmenu item,
+  display the submenu inside it.
+  we're changing the submenu's max-height from 0 to 200px;
+*/
+
+/*.mainmenu li:hover .submenu {
+    display: block;
+}*/
+
+/*
+  we now overwrite the background-color for .submenu links only.
+  CSS reads down the page, so code at the bottom will overwrite the code at the top.
+*/
+
+.submenu a {
+    background-color: #999;
+}
+
+/* hover behaviour for links inside .submenu */
+.submenu a:hover {
+    background-color: #666;
+}
+
