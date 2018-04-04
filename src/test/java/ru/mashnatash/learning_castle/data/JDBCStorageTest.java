@@ -17,8 +17,8 @@ public class JDBCStorageTest {
     @org.junit.Test
     public void testCreate() throws Exception {
         final JDBCStorage storage = new JDBCStorage();
-        final int id = storage.add(new User(-1,"ihopefinaltest"));
-        final User user = storage.get(id);
+        final int id = storage.add(new UserU(-1,"ihopefinaltest"));
+        final UserU user = storage.get(id);
         assertEquals(id, user.getId());
         /*final User user2 = storage.get(4);
         System.out.println(user2.getName());*/
@@ -28,7 +28,7 @@ public class JDBCStorageTest {
     @org.junit.Test
     public void values() {
         final JDBCStorage storage = new JDBCStorage();
-        List<User> users = new ArrayList<User>();
+        List<UserU> users = new ArrayList<UserU>();
         users = storage.values();
         assertEquals("Kola", users.get(0).getName());
         assertEquals("Tony", users.get(1).getName());

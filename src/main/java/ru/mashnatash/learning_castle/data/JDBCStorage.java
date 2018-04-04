@@ -9,7 +9,6 @@ public class JDBCStorage {
 
     public JDBCStorage() {
         final Settings settings = Settings.getInstance();
-
         try {
             connection = DriverManager.getConnection(settings.value("jdbc.url"), "postgres", "gtxfkm");
         } catch (SQLException e) {
@@ -17,12 +16,12 @@ public class JDBCStorage {
         }
     }
 
-    public List<User> values() {
-        final List<User> users = new ArrayList<User>();
+    public List<UserU> values() {
+        final List<UserU> users = new ArrayList<UserU>();
         try (final Statement statement = this.connection.createStatement();
              final ResultSet rs = statement.executeQuery("select * from users2")) {
             while(rs.next()) {
-                users.add(new User(rs.getInt("id"), rs.getString("name")));
+                users.add(new UserU(rs.getInt("id"), rs.getString("name")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -30,7 +29,7 @@ public class JDBCStorage {
         return users;
     }
 
-    public int add(User user) {
+    public int add(UserU user) {
         try (final PreparedStatement statement = this.connection.prepareStatement("insert into users2 (name) values(?)", Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1,user.getName());
             statement.executeUpdate();
@@ -45,12 +44,12 @@ public class JDBCStorage {
         throw new IllegalStateException("Could not create new user");
     }
 
-    public User get(int id) {
+    public UserU get(int id) {
         try(final PreparedStatement statement = this.connection.prepareStatement("select * from users2 where id = ?")) {
             statement.setInt(1,id);
             try (final ResultSet rs = statement.executeQuery()) {
                 while(rs.next()) {
-                    return new User(rs.getInt("id"), rs.getString("name"));
+                    return new UserU(rs.getInt("id"), rs.getString("name"));
                 }
             }
         } catch (SQLException e) {

@@ -67,21 +67,31 @@ body {
 
 /* define a fixed width for the entire menu */
 .navigation {
-    width: 300px;
     padding-top: 10px;
+    min-height: 100%;
+}
+
+.navigationmenu {
+    background-color: rgba(255, 255, 255, 0.5);
+    height: 100%;
+    position: fixed;
+    width: 250px;
+}
+
+.coursetittle {
+    padding-left: 10px;
 }
 
 /* reset our lists to remove bullet points and padding */
 .mainmenu, .submenu {
     list-style: none;
-    padding: 0;
     margin: 0;
+    padding-left: 20px;
 }
 
 /* make ALL links (main and submenu) have padding and background color */
 .mainmenu a {
     display: block;
-    background-color: #CCC;
     text-decoration: none;
     padding: 10px;
     color: #000;
@@ -89,7 +99,7 @@ body {
 
 /* add hover behaviour */
 .mainmenu a:hover {
-    background-color: #C5C5C5;
+    border-bottom: #d41872 2px solid;
 }
 
 /* this is the initial state of all submenus.
@@ -103,26 +113,27 @@ body {
     max-height: 200px;
 }
 
-/* when hovering over a .mainmenu item,
-  display the submenu inside it.
-  we're changing the submenu's max-height from 0 to 200px;
-*/
-
-/*.mainmenu li:hover .submenu {
-    display: block;
-}*/
-
-/*
-  we now overwrite the background-color for .submenu links only.
-  CSS reads down the page, so code at the bottom will overwrite the code at the top.
-*/
-
-.submenu a {
-    background-color: #999;
+/*Таблица*/
+.resulttable {
+    position: relative;
+    left: 25%;
+    top: 20px;
 }
 
-/* hover behaviour for links inside .submenu */
-.submenu a:hover {
-    background-color: #666;
+.course_result_table {
+    width: 70%; /* Ширина таблицы */
+    background: #949494; /* Цвет фона таблицы */
+    color: #020202; /* Цвет текста */
+    border-spacing: 0.5px; /* Расстояние между ячейками */
 }
+
+.course_result_table td, .course_result_table th {
+    background: #ffffff; /* Цвет фона ячеек */
+    padding: 5px; /* Поля вокруг текста */
+}
+
+
+
+
+
 

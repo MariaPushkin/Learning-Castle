@@ -1,15 +1,12 @@
 package ru.mashnatash.learning_castle;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import ru.mashnatash.learning_castle.data.*;
+import ru.mashnatash.learning_castle.data.userData.UserActions;
 
-import javax.xml.crypto.Data;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -54,7 +51,19 @@ public class WebsiteServer extends WebSocketServer  {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        conn.send(UserActions.authorization(dataBaseConnection,message));
+        JsonObject clientData = JSONManager.toJsonObject(message);
+        //TODO 1: Заменить на свич
+        if(clientData.get("code").toString().equals("1")) {
+            conn.send(UserActions.authorization(dataBaseConnection, false, clientData));
+        } else if (clientData.get("code").toString().equals("2")) {
+            conn.send("Воронков Петр Петрович");
+        } else if (clientData.get("code").toString().equals("3")) {
+            conn.send((UserActions.getTeacherCourses(dataBaseConnection, clientData)));
+        } else if (clientData.get("code").toString().equals("4")) {
+            //System.out.println(UserActions.getCourseResultTable(dataBaseConnection, clientData.get("course_id").getAsInt()));
+
+            conn.send(UserActions.getCourseResultTable(dataBaseConnection, clientData.get("course_id").getAsInt()));
+        }
     }
 
     @Override

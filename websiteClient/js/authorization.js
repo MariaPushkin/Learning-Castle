@@ -8,6 +8,7 @@ window.onload = function () {
         //проверка, что соединение открыто
         if(socket.readyState == WebSocket.OPEN) {
             var user = {
+                code: 1,
                 login: login.value,
                 password: password.value
             };
@@ -15,12 +16,7 @@ window.onload = function () {
             socket.send(JSON.stringify(user));
         }
     };
-    /*btnStop.onclick = function () {
-        //проверка, что соединение открыто
-        if(socket.readyState == WebSocket.OPEN) {
-            socket.close();
-        }
-    };*/
+
     var socket = new WebSocket('ws://127.0.0.1:4444');
 
     socket.onopen = function (event) {
@@ -30,15 +26,7 @@ window.onload = function () {
 
     socket.onclose = function (event) {
         console.log("Соединение закрыто");
-        //label.innerHTML = 'Соединение закрыто';
-        //код ошибки
         var errcode = event.code;
-        /*if(event.wasClean) {
-            label.innerHTML = 'Соединение закрыто корректно';
-        } else {
-            //причина ошибки
-            label.innerHTML = 'Соединение закрыто с ошибкой' + event.reason;
-        }*/
     };
 
     socket.onerror = function (event) {
@@ -52,15 +40,16 @@ window.onload = function () {
             console.log(reply);
             if(reply.status == "OK") {
                 if(reply.rights == "student") {
-                    window.location.href = "studentMain.html";
+                    window.location.href = "studentMain.html?id=" + reply.id;
                 } else if(reply.rights == "teacher") {
-                    window.location.href = "teacherMain.html";
+                    window.location.href = "teacherMain.html?id=" + reply.id;
                 }
             }
         }
     };
 };
 /*
+<a href="ex2.html?k=5">click</a>
 * 1. Проверка поддержки браузерами (все последнии поддерживают), но можно if window.websocket итп
 * 2. Создание объекта
 * 3. Соединение с сервером

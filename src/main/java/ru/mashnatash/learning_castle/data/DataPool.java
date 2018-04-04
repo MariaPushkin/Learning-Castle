@@ -26,10 +26,10 @@ public class DataPool {
         cpds.setMaxStatements(180);*/
 
 
-        final Settings settings = Settings.getInstance();
+        //final Settings settings = Settings.getInstance();
         cpds = new ComboPooledDataSource();
         cpds.setDriverClass("org.postgresql.Driver");
-        cpds.setJdbcUrl(settings.value("jdbc.url"));
+        cpds.setJdbcUrl("jdbc:postgresql://127.0.0.1:5432/Learning_Castle");
         cpds.setUser("postgres");
         cpds.setPassword("gtxfkm");
     }

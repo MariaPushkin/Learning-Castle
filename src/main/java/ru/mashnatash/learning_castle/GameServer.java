@@ -1,14 +1,18 @@
 package ru.mashnatash.learning_castle;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import ru.mashnatash.learning_castle.data.DataPool;
+import ru.mashnatash.learning_castle.data.JSONManager;
+import ru.mashnatash.learning_castle.data.userData.UserActions;
 
+import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +22,7 @@ public class GameServer extends WebSocketServer {
 
     private Set<WebSocket> simple_connections;
     private Set<WebSocket> connections;
+    private Connection dataBaseConnection;
 
     public GameServer() {
         super(new InetSocketAddress(TCP_PORT));
@@ -40,21 +45,22 @@ public class GameServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         System.out.println("Message from client: " + message);
-        /*for (WebSocket sock : connections) {
-            sock.send(message);
-        }*/
-        JsonParser parser = new JsonParser();
-        JsonObject mainObject = parser.parse(message).getAsJsonObject();
-        System.out.println("Login: " + mainObject.get("login"));
-        System.out.println("Password " + mainObject.get("password"));
-        String st = mainObject.get("login").toString();
-        System.out.println(st);
-        if(mainObject.get("login").toString().equals("\"Student\"") && mainObject.get("password").toString().equals("\"1234\"")) {
-            conn.send("{\"status\": \"1\", \"id\": \"1\"}");
-            System.out.println("Я тут и тут ок");
-        } else {
-            conn.send("{\"status\": \"0\"}");
+            try {
+                dataBaseConnection = DataPool.getInstance().getConnection();
+            } catch (PropertyVetoException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        JsonObject clientData = JSONManager.toJsonObject(message);
+        if(clientData.get("code").toString().equals("1")) {
+            conn.send(UserActions.authorization(dataBaseConnection,true, clientData));
+        } else if(clientData.get("code").toString().equals("2")) {
+            UserActions.testCompletion(message);
         }
+
     }
 
     @Override

@@ -9,56 +9,67 @@
 <body>
 <div class="teacher_menu">
     <ul class="menu_items">
-        <li> <a href="teacherMain.html">Главная</a></li>
-        <li class="active"> <a href="teacherCources.html">Мои курсы</a></li>
+        <li> <a id="mainpage" href="">Главная</a></li>
+        <li class="active"> <a id="courcespage" href="">Мои курсы</a></li>
         <li> <a href="">Проверка тестов</a></li>
         <li> <a href="">Управление материалами</a></li>
     </ul>
 </div>
 <div class="greeting">
     <ul>
-        <li>Добрый день, учитель!</li>
+        <li id="personname">Добрый день, учитель!</li>
         <li>Выход</li>
     </ul>
 </div>
 <div style=" width:100%; height:1px; clear:both;"></div>
-<div><a href="#" id="toggler">Архив</a>
-</div>
-<nav class="navigation" id="active" style="display: block;">
-    <ul class="mainmenu">
-        <li class="submenuopener"><a href="#" class="openlink" id="test">Алгебра 6А</a>
-            <ul class="submenu" id="subac1">
-                <li><a href="">Квадратные корни</a></li>
-                <li><a href="">Уравнения</a></li>
-                <li><a href="">Графики функций</a></li>
-            </ul>
-        </li>
-        <li class="submenuopener"><a href="" class="openlink">Геометрия 6А</a>
-            <ul class="submenu" id="subac2">
-                <li><a href="">Квадратные корни</a></li>
-                <li><a href="">Уравнения</a></li>
-                <li><a href="">Графики функций</a></li>
-            </ul></li>
-        <li><a href="" class="submenuopener">Алгебра 6В</a>
 
-        </li>
-        <li><a href="" class="submenuopener">Геометрия 6В</a>
-        </li>
-    </ul>
-</nav>
-<nav class="navigation" id="archive" style="display: none;">
-    <ul class="mainmenu">
-        <li id="subar1"><a href="">Матеаматика 5А 2015-2016</a></li>
-        <li id="subar2"><a href="">Матеаматика 5В 2015-2016</a></li>
-        <li id="subar3"><a href="">Алгебра 11А</a>
-            <ul class="submenu">
-                <li><a href="">Чот сложное</a></li>
-                <li><a href="">ЕГЭ</a></li>
-                <li><a href="">Апатия</a></li>
-            </ul>
-        </li>
-        <li id="subar4"><a href="">Геометрия 11А</a></li>
-    </ul>
-</nav>
+<div class="navigationmenu" >
+    <nav class="navigation" style="display: block;">
+        <div class="coursetittle">Активные</div>
+        <ul id="test" class="mainmenu">
+
+        </ul>
+        <div class="coursetittle">Архив</div>
+        <ul class="mainmenu">
+        </ul>
+    </nav>
+</div>
+<div class="resulttable">
+    <table border="1" class="course_result_table">
+        <tr>
+            <th>Номер</th>
+            <th>Имя</th>
+            <th>О11</th>
+            <th>О12</th>
+            <th>О21</th>
+            <th>О22</th>
+            <th>О11</th>
+            <th>О12</th>
+            <th>Итог</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Иванков Иван</td>
+            <td>5</td>
+            <td>5</td>
+            <td>5</td>
+            <td>5</td>
+            <td>5</td>
+            <td>5</td>
+            <td>5</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Кошкина Валерия</td>
+            <td>5</td>
+            <td>5</td>
+            <td>5</td>
+            <td>5</td>
+            <td>5</td>
+            <td>5</td>
+            <td>5</td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

@@ -1,10 +1,10 @@
 package ru.mashnatash.learning_castle.data;
 
-public class User {
+public class UserU {
     private int id;
     private String name;
 
-    public User(int id, String name) {
+    public UserU(int id, String name) {
         this.id = id;
         this.name = name;
     }

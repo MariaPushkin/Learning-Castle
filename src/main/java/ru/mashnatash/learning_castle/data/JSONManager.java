@@ -20,4 +20,8 @@ public class JSONManager {
         Gson gson = new GsonBuilder().create();
         return gson.toJson(message);
     }
+
+    public static String removeQuots(String str) {
+        return str.substring(1, str.length() - 1);
+    }
 }
