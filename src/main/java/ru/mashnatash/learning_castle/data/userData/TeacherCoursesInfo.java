@@ -3,11 +3,11 @@ package ru.mashnatash.learning_castle.data.userData;
 import java.util.ArrayList;
 
 public class TeacherCoursesInfo {
+    int code = 1;
     String teacherName;
     ArrayList<Course> courses;
 
     class Course {
-        int code = 1;
         int id;
         String name;
         String startYear;

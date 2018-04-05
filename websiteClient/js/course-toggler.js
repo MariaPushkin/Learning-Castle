@@ -29,7 +29,7 @@ window.onload= function() {
         if(typeof event.data == 'string') {
             console.log("Ответ от сервера " + event.data);
             var reply = JSON.parse(event.data);
-            if (reply.code = 1) {
+            if (reply.code == 1) {
                 var nameholder = document.getElementById("personname");
                 nameholder.textContent = reply.teacherName;
                 var blankmenu_arr = document.getElementsByClassName("mainmenu");
@@ -42,7 +42,7 @@ window.onload= function() {
                         a.href = "";
                         a.innerHTML = reply.courses[i].name;
                         a.id = reply.courses[i].id;
-                        a.className = "openresult";
+                        //a.className = "openresult";
                         resultlink_arr.push(a);
                         li.appendChild(a);
                         blankmenu_arr[0].appendChild(li);
@@ -56,7 +56,7 @@ window.onload= function() {
                             a2.href = "";
                             a2.innerHTML = reply.courses[i].name;
                             a2.id = reply.courses[i].id;
-                            a2.className = "openresult";
+                            //a2.className = "openresult";
                             resultlink_arr.push(a2);
                             li2.appendChild(a2);
                             ul.appendChild(li2);
@@ -85,7 +85,7 @@ window.onload= function() {
                             a2.href = "";
                             a2.innerHTML = reply.courses[i].name;
                             a2.id = reply.courses[i].id;
-                            a2.className = "openresult";
+                            //a2.className = "openresult";
                             resultlink_arr.push(a2);
                             li2.appendChild(a2);
                             ul.appendChild(li2);
@@ -94,28 +94,76 @@ window.onload= function() {
                         }
                     }
                 }
+                for(i = 0; i < opener_arr.length; i++) {
+                    opener_arr[i].getElementsByClassName("openlink")[0].onclick = function () {
+                        openMenu(archive_arr, opener_arr, this);
+                        return false;
+                    }
+                }
+                for(i = 0; i < resultlink_arr.length; i++) {
+                    document.getElementById(resultlink_arr[i].id).onclick = function () {
+                        var userparams = parseGetParams();
+                        var userid = {
+                            code: 4,
+                            teacher_id: userparams.id,
+                            course_id: this.id
+                        };
+                        socket.send(JSON.stringify(userid));
+                        var curr_active = document.getElementsByClassName("active_course")[0];
+                        if(curr_active) curr_active.classList.remove('active_course');
+                        this.className = "active_course";
+                        return false;
+                    }
+                }
             }
-        }
-        console.log(years_arr);
-        console.log(opener_arr);
-        for(i = 0; i < opener_arr.length; i++) {
-            opener_arr[i].getElementsByClassName("openlink")[0].onclick = function () {
-                openMenu(archive_arr, opener_arr, this);
-                return false;
-            }
-        }
+            else {
+                var div_table = document.getElementsByClassName("resulttable")[0];
+                var need_to_click_text = document.getElementsByClassName("course_dont_clicked")[0];
+                div_table.style.display = "block";
+                need_to_click_text.style.display = "none";
+                var curr_table = div_table.getElementsByClassName("course_result_table")[0];
+                if(curr_table) {
+                    div_table.removeChild(curr_table);
+                }
+                var table = document.createElement('table'); table.className = "course_result_table"; table.border = "1";
+                //var table = div_table.getElementsByClassName("course_result_table")[0];
+                var header = document.createElement('tr'); header.className = "header_line";
+                //var header = table.getElementsByClassName("header_line")[0];
+                var th_number = document.createElement('th'); th_number.textContent = "Номер";
+                var th_name = document.createElement('th'); th_name.textContent = "ФИО";
+                header.appendChild(th_number); header.appendChild(th_name);
+                table.appendChild(header);
+                div_table.appendChild(table);
+                for(var i = 1; i <= reply.number_of_topics; i++) {
+                    //ЗАПОЛНЕНИЕ ЗАГОЛОВКОВ
+                    var th_game = document.createElement('th');
+                    var th_test = document.createElement('th');
+                    th_game.textContent = "И" + i + 1;
+                    th_test.textContent = "Т" + i + 2;
+                    header.appendChild(th_game);
+                    header.appendChild(th_test);
+                }
+                for(var stud = 0; stud < reply.students.length; stud++) {
+                    var tr_student = document.createElement('tr');
+                    //tr_student.className = "student_line";
+                    var td_number = document.createElement('td');
+                    var td_name = document.createElement('td');
+                    td_number.textContent = stud + 1;
+                    td_name.textContent = reply.students[stud].name;
+                    tr_student.appendChild(td_number);
+                    tr_student.appendChild(td_name);
+                    for(var topic = 0; topic < reply.number_of_topics; topic++) {
+                        var td_game = document.createElement('td');
+                        var td_test = document.createElement('td');
+                        td_game.textContent = reply.students[stud].topics[topic].gamemark;
+                        td_test.textContent = reply.students[stud].topics[topic].testmark;
+                        tr_student.appendChild(td_game);
+                        tr_student.appendChild(td_test);
+                    }
+                        table.appendChild(tr_student);
+                }
 
-        console.log(resultlink_arr);
-        for(i = 0; i < resultlink_arr.length; i++) {
-            document.getElementById(resultlink_arr[i].id).onclick = function () {
-                var userparams = parseGetParams();
-                var userid = {
-                    code: 4,
-                    teacher_id: userparams.id,
-                    course_id: this.id
-                };
-                socket.send(JSON.stringify(userid));
-                return false;
+
             }
         }
     };
@@ -172,5 +220,9 @@ function parseGetParams() {
     }
     return $_GET;
 }
+
+
+
+
 
 

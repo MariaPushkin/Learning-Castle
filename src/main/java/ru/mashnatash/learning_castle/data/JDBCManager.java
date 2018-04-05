@@ -98,7 +98,6 @@ public class JDBCManager {
         //Количество студентов на курсе
         ArrayList<Integer> studentlist = new ArrayList<>();
         studentlist = this.getListOfCourseStudent(courseId);
-        ArrayList<Integer> studentMarks;
         for (int student: studentlist) {
             String studentName = null;
             Student studentUser = new Student();
@@ -114,6 +113,8 @@ public class JDBCManager {
                             studentUser.setName(studentName);
                         }
                         studentUser.addTopic(result.getInt(2),result.getInt(3));
+                    } else {
+                        studentUser.addTopic(0,0);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -142,7 +143,7 @@ public class JDBCManager {
     private ArrayList<Integer> getListOfCourseStudent(int courseId) {
         ArrayList<Integer> studentlist = new ArrayList<>();
         try(PreparedStatement preparedStatement = connection.prepareStatement("select us.user_id from courses as co, users as us\n" +
-                "where co.course_id = ? and co.class_no = us.class")) {
+                "where co.course_id = ? and co.class_no = us.class order by us.fullname")) {
             preparedStatement.setInt(1, courseId);
             ResultSet result = preparedStatement.executeQuery();
             while (result.next()) {
@@ -152,6 +153,7 @@ public class JDBCManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //System.out.println(studentlist.get(0) + " " + studentlist.get(1));
         return studentlist;
     }
 

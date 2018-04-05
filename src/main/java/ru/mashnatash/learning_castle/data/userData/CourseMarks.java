@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CourseMarks {
+    int code;
     private int course_id;
     private int number_of_topics;
     private ArrayList<Student> students;
 
     public CourseMarks() {
         students = new ArrayList<>();
+        code = 2;
     }
 
     public void setCourse_id(int course_id) {

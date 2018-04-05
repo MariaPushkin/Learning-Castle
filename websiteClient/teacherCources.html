@@ -7,12 +7,14 @@
     <script src="js/course-toggler.js"></script>
 </head>
 <body>
+<link href='http://fonts.googleapis.com/css?family=Oswald:300' rel='stylesheet' type='text/css'>
+
 <div class="teacher_menu">
     <ul class="menu_items">
-        <li> <a id="mainpage" href="">Главная</a></li>
-        <li class="active"> <a id="courcespage" href="">Мои курсы</a></li>
-        <li> <a href="">Проверка тестов</a></li>
-        <li> <a href="">Управление материалами</a></li>
+        <li> <a id="mainpage" href="" class="menu_btn">Главная</a></li>
+        <li> <a id="courcespage" href="" class="menu_btn active">Мои курсы</a></li>
+        <li> <a href="" class="menu_btn">Проверка тестов</a></li>
+        <li> <a href="" class="menu_btn">Управление материалами</a></li>
     </ul>
 </div>
 <div class="greeting">
@@ -34,42 +36,14 @@
         </ul>
     </nav>
 </div>
-<div class="resulttable">
-    <table border="1" class="course_result_table">
-        <tr>
+<div class="course_dont_clicked" style="display: block"> Не выбран предмет и класс</div>
+<div class="resulttable" style="display: none">
+    <!--<table border="1" class="course_result_table">
+        <tr class="header_line">
             <th>Номер</th>
             <th>Имя</th>
-            <th>О11</th>
-            <th>О12</th>
-            <th>О21</th>
-            <th>О22</th>
-            <th>О11</th>
-            <th>О12</th>
-            <th>Итог</th>
         </tr>
-        <tr>
-            <td>1</td>
-            <td>Иванков Иван</td>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Кошкина Валерия</td>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-            <td>5</td>
-        </tr>
-    </table>
+    </table>-->
 </div>
 </body>
 </html>

@@ -5,7 +5,7 @@ body {
     -webkit-background-size: 100%; /* Safari 3.1+ и Chrome 4.0+ */
     -o-background-size: 100%; /* Opera 9.6+ */
     background-size: 100%;
-    font-family: Ubuntu-Regular, sans-serif;
+    font-family: 'Oswald', sans-serif;
 }
 
 .pic {
@@ -18,7 +18,29 @@ body {
 .teacher_menu {
     background-color: rgba(0, 0, 0, 0.19);
     float: left;
+    padding-top: 8px;
+    padding-bottom: 11px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
+
+.menu_btn{
+    color:#999;
+    padding:10px 20px;
+    font-size:12px;
+    text-decoration:none;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+.menu_btn:hover, .active{
+    border:none;
+    background:rgba(0, 0, 0, 0.4);
+    background:#fff;
+    padding:20px 20px;
+    color:#1b1b1b;
+}
+
 
 .greeting {
     text-align: right;
@@ -59,12 +81,6 @@ body {
     color: #9c036b;
 }
 
-.menu_items .active {
-    background-color: rgba(201, 128, 140, 0.8);
-    font-weight: bold;
-}
-
-
 /* define a fixed width for the entire menu */
 .navigation {
     padding-top: 10px;
@@ -98,7 +114,7 @@ body {
 }
 
 /* add hover behaviour */
-.mainmenu a:hover {
+.mainmenu a:hover, .active_course {
     border-bottom: #d41872 2px solid;
 }
 
@@ -114,6 +130,20 @@ body {
 }
 
 /*Таблица*/
+.course_dont_clicked {
+    background-color: rgba(255, 255, 255, 0.5);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    width: 250px;
+    height: 50px;
+    position: relative;
+    left: 50%;
+    top: 200px;
+    text-align: center;
+}
+
 .resulttable {
     position: relative;
     left: 25%;
