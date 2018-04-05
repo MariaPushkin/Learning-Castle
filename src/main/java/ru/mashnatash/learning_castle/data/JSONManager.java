@@ -24,4 +24,15 @@ public class JSONManager {
     public static String removeQuots(String str) {
         return str.substring(1, str.length() - 1);
     }
+
+    public static String[] devideQuestion(String str) {
+        //Отделить вопрос от ответов
+        String[]result=str.split("\n");
+        result[0] = result[0].replace("question: ", "");
+        for(int i = 1; i < result.length;i++) {
+            result[i] = result[i].replace("answer: ","");
+            result[i] = result[i].replace("answer_right: ","");
+        }
+        return result;
+    }
 }

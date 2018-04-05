@@ -1,10 +1,7 @@
 package ru.mashnatash.learning_castle.data;
 
 import com.google.gson.JsonObject;
-import ru.mashnatash.learning_castle.data.userData.CourseMarks;
-import ru.mashnatash.learning_castle.data.userData.TeacherCoursesInfo;
-import ru.mashnatash.learning_castle.data.userData.User;
-import ru.mashnatash.learning_castle.data.userData.Student;
+import ru.mashnatash.learning_castle.data.userData.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class JDBCManager {
     private final Connection connection;
@@ -127,8 +125,6 @@ public class JDBCManager {
                     preparedStatement2.setInt(1, student);
                     ResultSet result2 = preparedStatement2.executeQuery();
                     if(result2.next()) {
-                        System.out.println("vnrgnv");
-                        System.out.println(result2.getString(1));
                         studentUser.setName(result2.getString(1));
                     }
                 } catch (SQLException e) {
@@ -140,6 +136,54 @@ public class JDBCManager {
         return marks;
     }
 
+    public QuestionInfo[] getTestQuestions(int topic) {
+        boolean isTest = true;
+        ArrayList<QuestionInfo> questionInfos = new ArrayList<>();
+        int quesNum = 1;
+        while (isTest) {
+            QuestionInfo question = new QuestionInfo();
+            try (PreparedStatement randomizingStatement = connection.prepareStatement("select ques_id from questions where ques_no = ?")) {
+                randomizingStatement.setInt(1,quesNum);
+                ResultSet resultSet = randomizingStatement.executeQuery();
+                ArrayList<Integer> ids = new ArrayList<>();
+                while (resultSet.next()) {
+                    ids.add(resultSet.getInt(1));
+                }
+                int randomRange = ids.size();
+                if(randomRange > 0) {
+                    try (PreparedStatement preparedStatement = connection.prepareStatement("select ques_type, description from questions where topic = ? " +
+                            "and ques_id = ?")) {
+                        final Random random = new Random();
+                        int id = random.nextInt(randomRange);
+                        preparedStatement.setInt(1, topic);
+                        preparedStatement.setInt(2, ids.get(id));
+                        ResultSet result = preparedStatement.executeQuery();
+                        if (result.next()) {
+                            question.setId(ids.get(id));
+                            question.setType(result.getInt(1));
+                            String[] devidedQues = JSONManager.devideQuestion(result.getString(2));
+                            question.setQuestion(devidedQues[0]);
+                            for (int i = 1; i < devidedQues.length; i++) {
+                                question.setAnswer(devidedQues[i]);
+                            }
+                        }
+                        questionInfos.add(question);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    quesNum++;
+                } else {
+                    isTest = false;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return questionInfos.toArray(new QuestionInfo[0]);
+    }
+
+    /*
+    * PRIVATES*/
     private ArrayList<Integer> getListOfCourseStudent(int courseId) {
         ArrayList<Integer> studentlist = new ArrayList<>();
         try(PreparedStatement preparedStatement = connection.prepareStatement("select us.user_id from courses as co, users as us\n" +
@@ -153,7 +197,6 @@ public class JDBCManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //System.out.println(studentlist.get(0) + " " + studentlist.get(1));
         return studentlist;
     }
 

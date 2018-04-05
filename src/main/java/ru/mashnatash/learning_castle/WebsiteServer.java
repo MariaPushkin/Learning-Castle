@@ -44,11 +44,7 @@ public class WebsiteServer extends WebSocketServer  {
         System.out.println("Message from client: " + message);
         try {
             dataBaseConnection = DataPool.getInstance().getConnection();
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
+        } catch (PropertyVetoException|IOException|SQLException e ) {
             e.printStackTrace();
         }
         JsonObject clientData = JSONManager.toJsonObject(message);

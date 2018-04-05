@@ -23,11 +23,10 @@ public class UserActions {
     }
 
     public static void testCompletion(String answerData) {
-        System.out.println("vcgdhjvb");
+        //TODO: Добавить коннекшн к бд
         Gson gson = new Gson();
         PlayerAnswers playerAnswers = new PlayerAnswers();
         playerAnswers = gson.fromJson(answerData, PlayerAnswers.class);
-        System.out.println(playerAnswers.answers[2]);
     }
 
     public static String getTeacherCourses(Connection connection, JsonObject userData) {
@@ -44,5 +43,13 @@ public class UserActions {
                 .setPrettyPrinting()
                 .create();
         return gson.toJson(manager.getMarks(courseId));
+    }
+
+    public static String getTest(Connection connection, int topic) {
+        final JDBCManager manager = new JDBCManager(connection);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        return gson.toJson(manager.getTestQuestions(topic));
     }
 }

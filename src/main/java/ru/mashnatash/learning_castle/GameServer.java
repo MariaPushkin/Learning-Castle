@@ -59,6 +59,8 @@ public class GameServer extends WebSocketServer {
             conn.send(UserActions.authorization(dataBaseConnection,true, clientData));
         } else if(clientData.get("code").toString().equals("2")) {
             UserActions.testCompletion(message);
+        } else if(clientData.get("code").toString().equals("3")) {
+            //Послать тест
         }
 
     }
