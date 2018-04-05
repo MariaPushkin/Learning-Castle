@@ -22,11 +22,12 @@ public class UserActions {
         }
     }
 
-    public static void testCompletion(String answerData) {
-        //TODO: Добавить коннекшн к бд
+    public static void testCompletion(Connection connection, String answerData) {
         Gson gson = new Gson();
         PlayerAnswers playerAnswers = new PlayerAnswers();
         playerAnswers = gson.fromJson(answerData, PlayerAnswers.class);
+        final JDBCManager manager = new JDBCManager(connection);
+        manager.setAnswers(playerAnswers);
     }
 
     public static String getTeacherCourses(Connection connection, JsonObject userData) {

@@ -47,20 +47,16 @@ public class GameServer extends WebSocketServer {
         System.out.println("Message from client: " + message);
             try {
                 dataBaseConnection = DataPool.getInstance().getConnection();
-            } catch (PropertyVetoException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
+            } catch (PropertyVetoException|IOException|SQLException e) {
                 e.printStackTrace();
             }
         JsonObject clientData = JSONManager.toJsonObject(message);
         if(clientData.get("code").toString().equals("1")) {
             conn.send(UserActions.authorization(dataBaseConnection,true, clientData));
         } else if(clientData.get("code").toString().equals("2")) {
-            UserActions.testCompletion(message);
+            UserActions.testCompletion(dataBaseConnection, message);
         } else if(clientData.get("code").toString().equals("3")) {
-            //Послать тест
+            //TODO: Послать тест
         }
 
     }

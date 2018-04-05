@@ -3,10 +3,7 @@ package ru.mashnatash.learning_castle.data;
 import com.google.gson.JsonObject;
 import ru.mashnatash.learning_castle.data.userData.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +16,10 @@ public class JDBCManager {
         this.connection = connection;
     }
 
+
+    /*
+    PUBLIC SELECT-Ы К БД
+     */
     public User gameAuthorize(JsonObject userData) {
         //TODO 2: Брать данные по авторизации для игры из бд
         User user = new User();
@@ -181,6 +182,32 @@ public class JDBCManager {
         }
         return questionInfos.toArray(new QuestionInfo[0]);
     }
+    /*
+    PUBLIC INSERT-Ы К БД
+     */
+    public void setAnswers(PlayerAnswers playerAnswers) {
+        int topic = this.findTestTopic(playerAnswers.idOrder[0]);
+        int test_id;
+        if(topic > 0) {
+            test_id = this.insertNewTest(topic);
+            if (test_id >= 0) {
+                for(int i = 0; i < playerAnswers.answers.length; i++) {
+                    try (final PreparedStatement statement = this.connection.prepareStatement("insert into solutions (question,testnum,student,solution)" +
+                            " values(?,?,?,?)")) {
+                        statement.setInt(1, playerAnswers.idOrder[i]);
+                        statement.setInt(2, test_id);
+                        statement.setInt(3, playerAnswers.getUserId());
+                        statement.setString(4,playerAnswers.answers[i]);
+                        statement.executeUpdate();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            this.checkIsComplete(topic, playerAnswers.getUserId());
+        }
+    }
+
 
     /*
     * PRIVATES*/
@@ -214,5 +241,54 @@ public class JDBCManager {
             e.printStackTrace();
         }
         return topicsList;
+    }
+
+    private int findTestTopic(int id) {
+        try(PreparedStatement preparedStatement = connection.prepareStatement("select topic from questions where ques_id = ?")) {
+            preparedStatement.setInt(1, id);
+            ResultSet result = preparedStatement.executeQuery();
+            if (result.next()) {
+                return result.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    private int insertNewTest(int topic) {
+        try (final PreparedStatement statement = this.connection.prepareStatement("insert into tests (topic,testdate) values(?,'2018-03-12')", Statement.RETURN_GENERATED_KEYS)) {
+            statement.setInt(1,topic);
+            //TODO: брать текущую дату
+            statement.executeUpdate();
+            try(ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if(generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void checkIsComplete(int topic, int userid) {
+        try (final PreparedStatement statement = this.connection.prepareStatement("update results set iscomplete = 't'" +
+                "WHERE stuent = ? and topic = ? and gamemark is not null")) {
+            statement.setInt(1,userid);
+            statement.setInt(2,topic);
+            int upd = statement.executeUpdate();
+            if(upd == 0) {
+
+                try (final PreparedStatement statementInsert = this.connection.prepareStatement("insert into results (stuent,topic,iscomplete)" +
+                        "values (?,?,'f')")) {
+                    statementInsert.setInt(1, userid);
+                    statementInsert.setInt(2, topic);
+                    statementInsert.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package ru.mashnatash.learning_castle.data;
 import com.google.gson.JsonObject;
 import org.junit.Test;
+import ru.mashnatash.learning_castle.data.userData.PlayerAnswers;
 import ru.mashnatash.learning_castle.data.userData.QuestionInfo;
 import ru.mashnatash.learning_castle.data.userData.UserActions;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 public class JDBCManagerTest {
 
     @org.junit.Test
-    public void getCourses() {
+    public void getCoursesTest() {
         String message = "{\"id\" : \"3\"}";
         JsonObject clientData = JSONManager.toJsonObject(message);
         Connection dataBaseConnection;
@@ -27,16 +28,40 @@ public class JDBCManagerTest {
     }
 
     @org.junit.Test
-    public void getTest() {
+    public void getTestTest() {
         int  topic = 1;
         Connection dataBaseConnection;
         try {
             dataBaseConnection = DataPool.getInstance().getConnection();
-            //final JDBCManager manager = new JDBCManager(dataBaseConnection);
-            //QuestionInfo[] info = manager.getTestQuestions(topic);
             System.out.println(UserActions.getTest(dataBaseConnection,topic));
-            //System.out.println(manager.getTestQuestions(topic)[0].getQuestion());
-            //luckyNumbers = Arrays.copyOf(luckyNumbers, 2 * luckyNumbers.length);
+        } catch (PropertyVetoException|IOException|SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @org.junit.Test
+    public void setTestTest() {
+        PlayerAnswers playerAnswers = new PlayerAnswers(2);
+
+        Connection dataBaseConnection;
+        try {
+            dataBaseConnection = DataPool.getInstance().getConnection();
+            final JDBCManager manager = new JDBCManager(dataBaseConnection);
+            manager.setAnswers(playerAnswers);
+        } catch (PropertyVetoException|IOException|SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @org.junit.Test
+    public void checkIsCompleteTest() {
+        int topic = 2;
+        int id = 10;
+        Connection dataBaseConnection;
+        try {
+            dataBaseConnection = DataPool.getInstance().getConnection();
+            final JDBCManager manager = new JDBCManager(dataBaseConnection);
+            manager.checkIsComplete(topic,id);
         } catch (PropertyVetoException|IOException|SQLException e) {
             e.printStackTrace();
         }
