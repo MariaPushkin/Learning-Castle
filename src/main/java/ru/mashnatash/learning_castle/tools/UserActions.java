@@ -1,14 +1,22 @@
-package ru.mashnatash.learning_castle.data.userData;
+package ru.mashnatash.learning_castle.tools;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import ru.mashnatash.learning_castle.data.JDBCManager;
-import ru.mashnatash.learning_castle.data.JSONManager;
+import ru.mashnatash.learning_castle.data.userData.PlayerAnswers;
+import ru.mashnatash.learning_castle.data.userData.UncheckedTest;
+import ru.mashnatash.learning_castle.data.userData.UncheckedTestsMessage;
+import ru.mashnatash.learning_castle.tools.JSONManager;
 
 import java.sql.Connection;
+import java.util.Arrays;
 
 public class UserActions {
+
+    /*
+    STRINGS
+     */
 
     public static String authorization(Connection connection, boolean isGame, JsonObject userData) {
         final JDBCManager manager = new JDBCManager(connection);
@@ -20,14 +28,6 @@ public class UserActions {
         } else {
             return JSONManager.toJsonString(manager.webAuthorize(userData));
         }
-    }
-
-    public static void testCompletion(Connection connection, String answerData) {
-        Gson gson = new Gson();
-        PlayerAnswers playerAnswers = new PlayerAnswers();
-        playerAnswers = gson.fromJson(answerData, PlayerAnswers.class);
-        final JDBCManager manager = new JDBCManager(connection);
-        manager.setAnswers(playerAnswers);
     }
 
     public static String getTeacherCourses(Connection connection, JsonObject userData) {
@@ -52,5 +52,31 @@ public class UserActions {
                 .setPrettyPrinting()
                 .create();
         return gson.toJson(manager.getTestQuestions(topic));
+    }
+
+    public static String getTestsForChecking(Connection connection, int teacherId) {
+        final JDBCManager manager = new JDBCManager(connection);
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        UncheckedTestsMessage message = new UncheckedTestsMessage(manager.getNameById(teacherId), manager.getUncheckedTests(teacherId));
+        return gson.toJson(message);
+    }
+
+    /*
+    VOIDS
+     */
+
+    public static void testCompletion(Connection connection, String answerData) {
+        Gson gson = new Gson();
+        PlayerAnswers playerAnswers = new PlayerAnswers();
+        playerAnswers = gson.fromJson(answerData, PlayerAnswers.class);
+        final JDBCManager manager = new JDBCManager(connection);
+        manager.setAnswers(playerAnswers);
+    }
+
+    public static void setRecords(Connection connection, JsonObject userData) {
+        final JDBCManager manager = new JDBCManager(connection);
+        manager.setGameRecord(userData);
     }
 }

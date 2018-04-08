@@ -13,7 +13,7 @@ window.onload = function () {
         console.log("Соединились");
         var userparams = parseGetParams();
         var userid = {
-            code: 2,
+            code: 5,
             id: userparams.id
         };
         socket.send(JSON.stringify(userid));
@@ -29,8 +29,10 @@ window.onload = function () {
     };
 
     socket.onmessage = function (event) {
+        var reply = JSON.parse(event.data);
         var nameholder = document.getElementById("personname");
-        nameholder.textContent = event.data;
+        nameholder.textContent = reply.name;
+        console.log(event.data)
     };
 }
 

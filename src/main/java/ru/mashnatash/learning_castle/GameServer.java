@@ -5,8 +5,8 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import ru.mashnatash.learning_castle.data.DataPool;
-import ru.mashnatash.learning_castle.data.JSONManager;
-import ru.mashnatash.learning_castle.data.userData.UserActions;
+import ru.mashnatash.learning_castle.tools.JSONManager;
+import ru.mashnatash.learning_castle.tools.UserActions;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
@@ -51,14 +51,22 @@ public class GameServer extends WebSocketServer {
                 e.printStackTrace();
             }
         JsonObject clientData = JSONManager.toJsonObject(message);
-        if(clientData.get("code").toString().equals("1")) {
-            conn.send(UserActions.authorization(dataBaseConnection,true, clientData));
-        } else if(clientData.get("code").toString().equals("2")) {
-            UserActions.testCompletion(dataBaseConnection, message);
-        } else if(clientData.get("code").toString().equals("3")) {
-            //TODO: Послать тест
+        switch (clientData.get("code").toString()) {
+            case "1" :
+                conn.send(UserActions.authorization(dataBaseConnection,true, clientData));
+                break;
+            case "2" :
+                UserActions.testCompletion(dataBaseConnection, message);
+                break;
+            case "3" :
+                //TODO: взять правильное название топика из игры!!!
+                conn.send(UserActions.getTest(dataBaseConnection,clientData.get("topic").getAsInt()));
+                break;
+            case "4" :
+                UserActions.setRecords(dataBaseConnection, clientData);
+                break;
+            default: break;
         }
-
     }
 
     @Override

@@ -5,7 +5,8 @@ import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import ru.mashnatash.learning_castle.data.*;
-import ru.mashnatash.learning_castle.data.userData.UserActions;
+import ru.mashnatash.learning_castle.tools.UserActions;
+import ru.mashnatash.learning_castle.tools.JSONManager;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
@@ -49,16 +50,23 @@ public class WebsiteServer extends WebSocketServer  {
         }
         JsonObject clientData = JSONManager.toJsonObject(message);
         //TODO 1: Заменить на свич
-        if(clientData.get("code").toString().equals("1")) {
-            conn.send(UserActions.authorization(dataBaseConnection, false, clientData));
-        } else if (clientData.get("code").toString().equals("2")) {
-            conn.send("Воронков Петр Петрович");
-        } else if (clientData.get("code").toString().equals("3")) {
-            conn.send((UserActions.getTeacherCourses(dataBaseConnection, clientData)));
-        } else if (clientData.get("code").toString().equals("4")) {
-            //System.out.println(UserActions.getCourseResultTable(dataBaseConnection, clientData.get("course_id").getAsInt()));
-
-            conn.send(UserActions.getCourseResultTable(dataBaseConnection, clientData.get("course_id").getAsInt()));
+        switch (clientData.get("code").toString()) {
+            case "1":
+                conn.send(UserActions.authorization(dataBaseConnection, false, clientData));
+                break;
+            case "2":
+                conn.send("Воронков Петр Петрович");
+                break;
+            case "3":
+                conn.send((UserActions.getTeacherCourses(dataBaseConnection, clientData)));
+                break;
+            case "4":
+                conn.send(UserActions.getCourseResultTable(dataBaseConnection, clientData.get("course_id").getAsInt()));
+                break;
+            case "5":
+                conn.send(UserActions.getTestsForChecking(dataBaseConnection,clientData.get("id").getAsInt()));
+                break;
+            default: break;
         }
     }
 

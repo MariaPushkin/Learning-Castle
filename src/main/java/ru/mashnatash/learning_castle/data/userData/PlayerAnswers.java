@@ -11,9 +11,9 @@ public class PlayerAnswers
 
     public PlayerAnswers(int a) {
         this.code = a;
-        this.userId = 6;
-        this.answers = new String[]{"3","1","3","1"};
-        this.idOrder = new int[]{2,3,6,8};
+        this.userId = 10;
+        this.answers = new String[]{"4","1","18","2","2","1,2,4,9,16,25,36,49,64,81,100,121,144,169,196"};
+        this.idOrder = new int[]{1,11,13,8,18,20};
     }
 
     public int getUserId() {

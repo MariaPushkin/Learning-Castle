@@ -1,21 +1,44 @@
 package ru.mashnatash.learning_castle.data.userData;
 
+import java.util.ArrayList;
+
 public class User {
-    int status;
-    int code;
-    int id;
-    String gender;
-    boolean[] isCompleted;
-    boolean[] completedTests;
-    int[] minigameRecord;
+    private int status; //1 - OK
+    private int id;
+    private String gender;
+    private ArrayList<Boolean> isCompleted;
+    private ArrayList<Boolean> completedTests;
+    private ArrayList<Integer> minigameRecord; //-100 - в игру не играли
 
     public User() {
         status = 1;
-        code = 1;
-        id = 1;
-        gender = "f";
-        isCompleted = new boolean[]{true, false, false};
-        completedTests = new boolean[]{false, false, false};
-        minigameRecord = new int[]{6,-100,-100};
+        this.isCompleted = new ArrayList<>();
+        this.completedTests = new ArrayList<>();
+        this.minigameRecord = new ArrayList<>();
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void addNewIsComplete(boolean isComp) {
+        this.isCompleted.add(isComp);
+    }
+
+    public void addNewTestStatus(boolean testSt) {
+        this.completedTests.add(testSt);
+    }
+
+    public void addNewGameRecord(int rec) {
+        this.minigameRecord.add(rec);
     }
 }
+

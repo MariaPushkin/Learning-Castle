@@ -1,12 +1,10 @@
 package ru.mashnatash.learning_castle.data;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import ru.mashnatash.learning_castle.tools.JSONManager;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.Assert.*;
 
 
 public class JSONManagerTest {
@@ -22,5 +20,15 @@ public class JSONManagerTest {
         myMap.put("two", "world");
 
         System.out.println(JSONManager.toJsonString(myMap));
+    }
+
+    @Test
+    public void getAnswerRight() {
+        String desc = "question: Выберите наибольшее из данных чисел: A - 8,5; B - 2sqrt19; C - 3sqrt8; D - sqrt73\n" +
+                "answer: A\n" +
+                "answer_right: B\n" +
+                "answer: C\n" +
+                "answer: D";
+        System.out.println(JSONManager.getRightAnswer(desc));
     }
 }

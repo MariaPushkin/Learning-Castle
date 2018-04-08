@@ -3,11 +3,10 @@ window.onload= function() {
         openclose('active','archive', this);
         return false;
     };*/
-    var mainpage = document.getElementById("mainpage");
-    var courcespage = document.getElementById("courcespage");
-    mainpage.href = "teacherMain.html" + window.location.search;
-    courcespage.href ="teacherCources.html" + window.location.search;
-    console.log(courcespage.href);
+    var pages_arr = document.getElementsByClassName("menu_btn");
+    for(page = 0; page < pages_arr.length; page++) {
+        pages_arr[page].href = pages_arr[page].href + window.location.search;
+    }
 
     var archive_arr = new Array();
     var opener_arr = new Array();

@@ -1,4 +1,4 @@
-package ru.mashnatash.learning_castle.data;
+package ru.mashnatash.learning_castle.tools;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,11 +27,22 @@ public class JSONManager {
 
     public static String[] devideQuestion(String str) {
         //Отделить вопрос от ответов
-        String[]result=str.split("\n");
+        String[] result = str.split("\n");
         result[0] = result[0].replace("question: ", "");
         for(int i = 1; i < result.length;i++) {
             result[i] = result[i].replace("answer: ","");
             result[i] = result[i].replace("answer_right: ","");
+        }
+        return result;
+    }
+
+    public static String getRightAnswer(String str) {
+        String result = "";
+        String[] lines = str.split("\n");
+        for(int i = 1; i < lines.length;i++) {
+            if(lines[i].contains("answer_right: ")) {
+                result += i;
+            }
         }
         return result;
     }
