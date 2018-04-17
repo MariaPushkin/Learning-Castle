@@ -232,7 +232,9 @@ public class JDBCManager {
                     UncheckedTest uncheckedTest = new UncheckedTest();
                     uncheckedTest.setTopic(topic);
                     uncheckedTest.setTopic_name(topicName);
+                    uncheckedTest.setTest_num(testnum);
                     while (questionResult.next()) {
+                        uncheckedTest.setStudent_id(questionResult.getInt(2));
                         uncheckedTest.setStudent_name(this.getNameById(questionResult.getInt(2)));
                         String questionDescription;
                         int questionType;
@@ -246,7 +248,8 @@ public class JDBCManager {
                                questionDescription = qaResult.getString(1);
                                questionType = qaResult.getInt(2);
                                score = MarkCounter.countMark(questionType, questionDescription, answer);
-                               uncheckedTest.setQuestions(questionDescription, answer, questionType, score);
+                               String[] answers = JSONManager.devideQuestion(questionDescription);
+                               uncheckedTest.setQuestions(answers[0], answer, questionType, score, answers);
                            }
                         }
                     }

@@ -49,7 +49,6 @@ public class WebsiteServer extends WebSocketServer  {
             e.printStackTrace();
         }
         JsonObject clientData = JSONManager.toJsonObject(message);
-        //TODO 1: Заменить на свич
         switch (clientData.get("code").toString()) {
             case "1":
                 conn.send(UserActions.authorization(dataBaseConnection, false, clientData));
@@ -65,6 +64,9 @@ public class WebsiteServer extends WebSocketServer  {
                 break;
             case "5":
                 conn.send(UserActions.getTestsForChecking(dataBaseConnection,clientData.get("id").getAsInt()));
+                break;
+            case "6":
+                //System.out.println(message);
                 break;
             default: break;
         }
