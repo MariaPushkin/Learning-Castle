@@ -2,6 +2,8 @@ package ru.mashnatash.learning_castle;
 
 import com.google.gson.JsonObject;
 import org.java_websocket.WebSocket;
+import org.java_websocket.framing.Framedata;
+import org.java_websocket.framing.FramedataImpl1;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import ru.mashnatash.learning_castle.data.*;
@@ -14,7 +16,7 @@ import java.net.InetSocketAddress;
 import java.sql.*;
 import java.util.*;
 
-public class WebsiteServer extends WebSocketServer  {
+public class WebsiteServer extends WebSocketServer {
     private static final int TCP_PORT = 4444;
 
     private Set<WebSocket> unsafeSocketConnections;
@@ -22,7 +24,7 @@ public class WebsiteServer extends WebSocketServer  {
     private Connection dataBaseConnection;
 
     public WebsiteServer() {
-        super(new InetSocketAddress(TCP_PORT));
+        super(new InetSocketAddress("localhost",TCP_PORT));
         unsafeSocketConnections = new HashSet<WebSocket>();
         //connections = new HashSet<WebSocket>();
         socketConnections = Collections.synchronizedSet(unsafeSocketConnections);
@@ -45,7 +47,7 @@ public class WebsiteServer extends WebSocketServer  {
         System.out.println("Message from client: " + message);
         try {
             dataBaseConnection = DataPool.getInstance().getConnection();
-        } catch (PropertyVetoException|IOException|SQLException e ) {
+        } catch (PropertyVetoException | IOException | SQLException e) {
             e.printStackTrace();
         }
         JsonObject clientData = JSONManager.toJsonObject(message);
@@ -63,12 +65,13 @@ public class WebsiteServer extends WebSocketServer  {
                 conn.send(UserActions.getCourseResultTable(dataBaseConnection, clientData.get("course_id").getAsInt()));
                 break;
             case "5":
-                conn.send(UserActions.getTestsForChecking(dataBaseConnection,clientData.get("id").getAsInt()));
+                conn.send(UserActions.getTestsForChecking(dataBaseConnection, clientData.get("id").getAsInt()));
                 break;
             case "6":
                 //System.out.println(message);
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 
@@ -81,4 +84,10 @@ public class WebsiteServer extends WebSocketServer  {
         }
         System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
     }
+
+    @Override
+    public void onStart() {
+        System.out.println("Wait client from website");
+    }
+
 }

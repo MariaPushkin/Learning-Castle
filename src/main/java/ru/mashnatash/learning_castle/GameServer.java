@@ -78,4 +78,9 @@ public class GameServer extends WebSocketServer {
         }
         System.out.println("ERROR from " + conn.getRemoteSocketAddress().getAddress().getHostAddress());
     }
+
+    @Override
+    public void onStart() {
+        System.out.println("Wait client from game");
+    }
 }
