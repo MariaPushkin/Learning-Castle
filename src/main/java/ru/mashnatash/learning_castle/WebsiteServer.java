@@ -56,7 +56,7 @@ public class WebsiteServer extends WebSocketServer {
                 conn.send(UserActions.authorization(dataBaseConnection, false, clientData));
                 break;
             case "2":
-                conn.send("Воронков Петр Петрович");
+                conn.send(UserActions.getUserName(dataBaseConnection, clientData.get("id").getAsInt()));
                 break;
             case "3":
                 conn.send((UserActions.getTeacherCourses(dataBaseConnection, clientData)));
@@ -68,7 +68,7 @@ public class WebsiteServer extends WebSocketServer {
                 conn.send(UserActions.getTestsForChecking(dataBaseConnection, clientData.get("id").getAsInt()));
                 break;
             case "6":
-                //System.out.println(message);
+                UserActions.setTestMark(dataBaseConnection, clientData);
                 break;
             default:
                 break;

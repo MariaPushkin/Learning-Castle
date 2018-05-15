@@ -224,10 +224,12 @@ public class JDBCManager {
                 int testnum = result.getInt(1);
                 int topic = result.getInt(2);
                 String topicName = result.getString(3);
-                try (PreparedStatement questionsStatement = connection.prepareStatement("select distinct sol.sol_num, sol.student, sol.solution, sol.question from solutions as sol, users as use, courses as cou\n" +
-                        "where sol.student = use.user_id and use.class = cou.class_no and cou.teacher = ? and sol.testnum = ?")) {
+                try (PreparedStatement questionsStatement = connection.prepareStatement("select distinct sol.sol_num, sol.student, sol.solution, sol.question from solutions as sol, users as use, courses as cou, topics as top\n" +
+                        "                        where sol.student = use.user_id and use.class = cou.class_no and cou.teacher = ? and sol.testnum = ? \n" +
+                        "and cou.subject = top.subject and top.topic_id = ?")) {
                     questionsStatement.setInt(1, teacherId);
                     questionsStatement.setInt(2, testnum);
+                    questionsStatement.setInt(3, topic);
                     ResultSet questionResult = questionsStatement.executeQuery();
                     UncheckedTest uncheckedTest = new UncheckedTest();
                     uncheckedTest.setTopic(topic);
@@ -299,7 +301,7 @@ public class JDBCManager {
                     }
                 }
             }
-            this.isCompleteTest(topic, playerAnswers.getUserId());
+            this.completeTest(topic, playerAnswers.getUserId());
         }
     }
 
@@ -320,7 +322,26 @@ public class JDBCManager {
                 e.printStackTrace();
             }
         }
-        this.isCompleteGame(topic, student, MarkCounter.countMark(score, maxscore, topic));
+        this.completeGame(topic, student, MarkCounter.countMark(score, maxscore, topic));
+    }
+
+    /*
+    PUBLIC UPDATES
+     */
+
+    public void setTestMark(JsonObject userData) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("update results set testmark = ? where topic = ? and stuent = ?")) {
+            preparedStatement.setInt(1,MarkCounter.countMark(userData.get("score").getAsInt(), userData.get("maxscore").getAsInt()));
+            preparedStatement.setInt(2,userData.get("topic").getAsInt());
+            preparedStatement.setInt(3, userData.get("student_id").getAsInt());
+            preparedStatement.executeUpdate();
+            try (PreparedStatement statement = connection.prepareStatement("update tests set ischecked ='t' where test_num = ?")) {
+                statement.setInt(1,userData.get("test_num").getAsInt());
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -399,7 +420,7 @@ public class JDBCManager {
         return -1;
     }
 
-    private void isCompleteGame(int topic, int userid, int mark) {
+    private void completeGame(int topic, int userid, int mark) {
         try (final PreparedStatement statement = this.connection.prepareStatement("update results set iscomplete = 't'" +
                 "WHERE stuent = ? and topic = ? and gamemark is null")) {
             statement.setInt(1, userid);
@@ -426,7 +447,7 @@ public class JDBCManager {
         }
     }
 
-    private void isCompleteTest(int topic, int userid) {
+    private void completeTest(int topic, int userid) {
         try (final PreparedStatement statement = this.connection.prepareStatement("update results set iscomplete = 't'" +
                 "WHERE stuent = ? and topic = ? and gamemark is not null")) {
             statement.setInt(1, userid);

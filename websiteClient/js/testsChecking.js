@@ -42,6 +42,7 @@ window.onload = function () {
         var unchecked_tests_arr = reply.uncheckedTests;
         for(var i = 0; i < unchecked_tests_arr.length; i++) {
             var test_score = 0;
+            var test_maxscore = 0;
             var test_li = document.createElement('li');
             tests_arr.push(test_li);
             var a = document.createElement('a');
@@ -70,18 +71,23 @@ window.onload = function () {
                     innerText += "Ответ ученика: " + question_arr[j].student_answer + "<br> <b>Набранные баллы: </b>" +
                         question_arr[j].score + "<br>";
                     test_score += question_arr[j].score;
+                    if(question_arr[j].type == 1) test_maxscore += 1;
+                    else test_maxscore += 2;
                 } else {
                     innerText += "Ответ ученика: " + question_arr[j].student_answer + "<br> <b>Набранные баллы: </b>\"" +
                         "<select class=\"score_selection\"> <option>0</option><option>1</option><option>2</option><option>3</option></select> /3 <br>";
+                    test_maxscore += 3;
                 }
+                innerText += "<br>";
             }
-            innerText += "<input class=\"button_check\" type=\"button\" id=\"send\" value=\"Подтвердить проверку\"><br>";
+            innerText += "<input class=\"button_check\" type=\"button\" id=\"send\" value=\"Подтвердить проверку\"><br><br>";
             var score = {
                 code: 6,
                 topic: unchecked_tests_arr[i].topic,
                 student_id: unchecked_tests_arr[i].student_id,
                 test_num: unchecked_tests_arr[i].test_num,
-                score: test_score
+                score: test_score,
+                maxscore: test_maxscore
             };
             scores_arr.push(score);
             test_data.innerHTML = innerText;

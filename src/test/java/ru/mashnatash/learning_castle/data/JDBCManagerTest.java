@@ -2,6 +2,7 @@ package ru.mashnatash.learning_castle.data;
 import com.google.gson.JsonObject;
 import org.junit.Test;
 import ru.mashnatash.learning_castle.data.userData.PlayerAnswers;
+import ru.mashnatash.learning_castle.tools.MarkCounter;
 import ru.mashnatash.learning_castle.tools.UserActions;
 import ru.mashnatash.learning_castle.tools.JSONManager;
 
@@ -104,4 +105,5 @@ public class JDBCManagerTest {
             e.printStackTrace();
         }
     }
+
 }

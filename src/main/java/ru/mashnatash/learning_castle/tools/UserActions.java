@@ -30,6 +30,11 @@ public class UserActions {
         }
     }
 
+    public static String getUserName(Connection connection, int id) {
+        final JDBCManager manager = new JDBCManager(connection);
+        return manager.getNameById(id);
+    }
+
     public static String getTeacherCourses(Connection connection, JsonObject userData) {
         final JDBCManager manager = new JDBCManager(connection);
         Gson gson = new GsonBuilder()
@@ -78,5 +83,10 @@ public class UserActions {
     public static void setRecords(Connection connection, JsonObject userData) {
         final JDBCManager manager = new JDBCManager(connection);
         manager.setGameRecord(userData);
+    }
+
+    public static void setTestMark(Connection connection, JsonObject userData) {
+        final JDBCManager manager = new JDBCManager(connection);
+        manager.setTestMark(userData);
     }
 }

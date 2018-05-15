@@ -16,8 +16,12 @@ public class MarkCounter {
         switch (topic) {
             case 1: return bubbleMark(score);
             case 2: return cloudeMark(score);
-            default: return otherMark(score, maxscore);
+            default: return countMark(score, maxscore);
         }
+    }
+
+    public static int countMark(int score, int maxscore) {
+        return Math.round((float)score/maxscore * 5);
     }
 
     private static int bubbleMark(int score){
@@ -34,9 +38,9 @@ public class MarkCounter {
         return 5;
     }
 
-    private static int otherMark(int score, int maxscore) {
+    /*private static int otherMark(int score, int maxscore) {
         return Math.round(score/maxscore * 5);
-    }
+    }*/
 
     private static int testTypeOne(String question, String answer){
         String rightAnswer = JSONManager.getRightAnswer(question);
