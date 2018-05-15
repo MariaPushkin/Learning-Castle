@@ -49,7 +49,8 @@ public class MarkCounter {
     }
 
     private static int testTypeTwo(String question, String answer){
-        //TODO сделать проверку и подсчет баллов для вопроса с множеством ответов
-        return -1;
+        String rightAnswer = JSONManager.getRightAnswer(question);
+        if(answer.equals(rightAnswer)) return 2;
+        return 0;
     }
 }

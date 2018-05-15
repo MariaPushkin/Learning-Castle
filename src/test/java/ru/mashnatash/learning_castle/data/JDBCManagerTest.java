@@ -29,7 +29,7 @@ public class JDBCManagerTest {
 
     @org.junit.Test
     public void getTestTest() {
-        int  topic = 1;
+        int  topic = 2;
         Connection dataBaseConnection;
         try {
             dataBaseConnection = DataPool.getInstance().getConnection();

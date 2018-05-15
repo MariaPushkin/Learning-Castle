@@ -175,8 +175,9 @@ public class JDBCManager {
         int quesNum = 1;
         while (isTest) {
             QuestionInfo question = new QuestionInfo();
-            try (PreparedStatement randomizingStatement = connection.prepareStatement("select ques_id from questions where ques_no = ?")) {
+            try (PreparedStatement randomizingStatement = connection.prepareStatement("select ques_id from questions where ques_no = ? and topic = ?")) {
                 randomizingStatement.setInt(1, quesNum);
+                randomizingStatement.setInt(2, topic);
                 ResultSet resultSet = randomizingStatement.executeQuery();
                 ArrayList<Integer> ids = new ArrayList<>();
                 while (resultSet.next()) {
